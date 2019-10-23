@@ -56,10 +56,10 @@ data = np.array(data).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
 
 # save features for data
 np.save('data_features.npy', data)
-data = np.load('data_features.npy')
+
 
 # save features for labels
 np.save('labels_list.npy', labels)
-label = np.load('labels_list.npy')
+
 
 
