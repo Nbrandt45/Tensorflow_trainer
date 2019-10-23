@@ -9,7 +9,7 @@ class invalidImageError(Exception): pass
 
 
 # get directory for images
-data_dir = r"C:\Users\Nick\PycharmProjects\tensorflow_trainer\silverware_images"
+data_dir = r".\silverware_images"
 types = ["fork_images", "spoon_images", "knife_images"]
 
 # set size for the images
