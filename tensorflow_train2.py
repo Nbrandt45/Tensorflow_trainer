@@ -33,11 +33,12 @@ label = to_categorical(label)
 
 """" splitting data """
 # split into train and test
-train_size = 500
-trainX, testX = data[:train_size, :], data[train_size:, :]
-trainy, testy = label[:train_size], label[train_size:]
+train_size = 80
+trainX = data[:train_size, :]
+trainy = label[:train_size]
 
-
+testX = data[train_size:, :]
+testy = label[train_size:]
 def create_model():
 
     """ create the model """
