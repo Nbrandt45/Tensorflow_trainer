@@ -6,6 +6,17 @@ import numpy as np
 from sklearn.datasets.samples_generator import make_blobs
 from tensorflow.keras.utils import to_categorical
 from matplotlib import pyplot
+from tensorflow.keras.callbacks import TensorBoard
+import time
+
+"""
+Attributions taken from tensorflow.org as examples for creation of this model
+https://www.tensorflow.org/tutorials/
+"""
+
+NAME = f"Utensil-image-recognition-64x3-{int(time.time())}"
+
+tensorboard = TensorBoard(log_dir=f"logs\\{NAME}")
 
 
 data = np.load('data_features.npy')
@@ -16,32 +27,53 @@ data = data/255.0
 
 # generate 2d classification dataset
 data, label = make_blobs(n_samples=1000, centers=3, n_features=2, cluster_std=2, random_state=2)
-# one hot encode output variable
+# encode output variable
 label = to_categorical(label)
 
+
+"""" splitting data """
 # split into train and test
-n_train = 500
-trainX, testX = data[:n_train, :], data[n_train:, :]
-trainy, testy = label[:n_train], label[n_train:]
+train_size = 500
+trainX, testX = data[:train_size, :], data[train_size:, :]
+trainy, testy = label[:train_size], label[train_size:]
 
-# define model
-model = Sequential()
-model.add(Dense(50, input_dim=2, activation='relu', kernel_initializer='he_uniform'))
-model.add(Dense(3, activation='softmax'))
 
-# compile model
-opt = Adam(lr=0.01)
-model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
+def create_model():
+
+    """ create the model """
+    # define model
+    new_model = Sequential()
+    new_model.add(Dense(50, input_dim=2, activation='relu', kernel_initializer='he_uniform'))
+    new_model.add(Dense(3, activation='softmax'))
+
+    # create optimizer
+    opt = Adam(lr=0.01)
+
+    # compile model
+    new_model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
+
+    return new_model
+
+
+# create the model
+model = create_model()
 
 # fit model
-history = model.fit(trainX, trainy, validation_data=(testX, testy), epochs=100, verbose=2)
+model.fit(trainX, trainy, batch_size=32, epochs=100, verbose=2, callbacks=[tensorboard])
 
 # evaluate the model
-_, train_acc = model.evaluate(trainX, trainy, verbose=0)
-_, test_acc = model.evaluate(testX, testy, verbose=0)
-print('Train: %.3f, Test: %.3f' % (train_acc, test_acc))
+loss, acc = model.evaluate(trainX, trainy, verbose=2)
+# _, test_acc = model.evaluate(testX, testy, verbose=0)
+# print('Train: %.3f, Test: %.3f' % (train_acc, test_acc))
+print('Trained model, accuracy: {:5.2f}%'.format(100*acc))
 
+
+model.save('image_recognition.h5')
+print('saved model')
+
+"""
 # plot loss during training
+#
 pyplot.subplot(211)
 pyplot.title('Loss')
 pyplot.plot(history.history['loss'], label='train')
@@ -55,29 +87,6 @@ pyplot.plot(history.history['accuracy'], label='train')
 pyplot.plot(history.history['val_accuracy'], label='test')
 pyplot.legend()
 pyplot.show()
-
 """
 
-model = Sequential()
-model.add(Conv2D(64, (3, 3), input_shape=data.shape[1:]))
-model.add(Activation("relu"))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Conv2D(64, (3, 3)))
-model.add(Activation("relu"))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-
-model.add(Flatten())
-model.add(Dense(64))
-
-model.add(Dense(1))
-
-model.add(Activation('sigmoid'))
-
-opt = Adam(lr=0.01)
-
-model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=['accuracy'])
-
-model.fit(data, label, batch_size=90, epochs=20, verbose=1, validation_split=0.1)
-
-"""
 

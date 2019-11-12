@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import os
 import cv2
 import random
@@ -17,7 +16,7 @@ IMG_SIZE = 100
 
 training_data = []
 
-
+""" add the images used to train our model"""
 def add_training_data():
     for t in types:
         type_index = types.index(t)
