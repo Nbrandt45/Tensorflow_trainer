@@ -45,6 +45,7 @@ def create_model():
     # define model
     new_model = Sequential()
     new_model.add(Dense(50, input_dim=2, activation='relu', kernel_initializer='he_uniform'))
+    new_model.add(Flatten())
     new_model.add(Dense(3, activation='softmax'))
 
     # create optimizer
@@ -64,6 +65,7 @@ model.fit(trainX, trainy, batch_size=32, epochs=100, verbose=2, callbacks=[tenso
 
 # evaluate the model
 loss, acc = model.evaluate(trainX, trainy, verbose=2)
+# _, train_acc = model.evaluate(trainX, trainy, verbose=0)
 # _, test_acc = model.evaluate(testX, testy, verbose=0)
 # print('Train: %.3f, Test: %.3f' % (train_acc, test_acc))
 print('Trained model, accuracy: {:5.2f}%'.format(100*acc))
