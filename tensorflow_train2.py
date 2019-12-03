@@ -30,6 +30,8 @@ data, label = make_blobs(n_samples=1000, centers=3, n_features=2, cluster_std=2,
 # encode output variable
 label = to_categorical(label)
 
+print(data.shape)
+
 
 """" splitting data """
 # split into train and test
@@ -63,6 +65,7 @@ model = create_model()
 # fit model
 model.fit(trainX, trainy, batch_size=32, epochs=100, verbose=2, callbacks=[tensorboard])
 
+
 # evaluate the model
 loss, acc = model.evaluate(trainX, trainy, verbose=2)
 # _, train_acc = model.evaluate(trainX, trainy, verbose=0)
@@ -71,8 +74,8 @@ loss, acc = model.evaluate(trainX, trainy, verbose=2)
 print('Trained model, accuracy: {:5.2f}%'.format(100*acc))
 
 
-model.save('image_recognition.h5')
-print('saved model')
+#model.save('image_recognition.h5')
+#print('saved model')
 
 """
 # plot loss during training
