@@ -19,8 +19,8 @@ def load_data(filepath):
     img_array = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
     new_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
 
-    #plt.imshow(new_array, cmap="gray")
-    #plt.show()
+    plt.imshow(new_array, cmap="gray")
+    plt.show()
     return new_array
 
 
@@ -34,7 +34,7 @@ input_test_data = load_data(path)
 
 #print(input_test_data)
 
-#prediction_img = model.predict([[input_test_data]])
+prediction_img = model.predict([[input_test_data]])
 
 input_img = (np.expand_dims(input_test_data, 0))
 
